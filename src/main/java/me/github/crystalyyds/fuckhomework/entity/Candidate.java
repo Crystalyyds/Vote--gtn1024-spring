@@ -61,7 +61,6 @@ public class Candidate extends BaseEntity {
         return "Candidate{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", users=" + users +
                 "} " + super.toString();
     }
 }

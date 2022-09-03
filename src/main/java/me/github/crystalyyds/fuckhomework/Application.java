@@ -1,8 +1,10 @@
 package me.github.crystalyyds.fuckhomework;
 
 import me.github.crystalyyds.fuckhomework.entity.Candidate;
+import me.github.crystalyyds.fuckhomework.entity.Manager;
 import me.github.crystalyyds.fuckhomework.entity.User;
 import me.github.crystalyyds.fuckhomework.service.CandidateService;
+import me.github.crystalyyds.fuckhomework.service.ManagerService;
 import me.github.crystalyyds.fuckhomework.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,8 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 import javax.inject.Inject;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -20,10 +21,13 @@ public class Application implements CommandLineRunner {
     private final UserService userService;
     private final CandidateService candidateService;
 
+    private final ManagerService managerService;
+
     @Inject
-    public Application(UserService userService, CandidateService candidateService) {
+    public Application(UserService userService, CandidateService candidateService,ManagerService managerService) {
         this.userService = userService;
         this.candidateService = candidateService;
+        this.managerService= managerService;
     }
 
     public static void main(String[] args) {
@@ -38,6 +42,8 @@ public class Application implements CommandLineRunner {
             System.out.println("******        2.用户登录      ******");
             System.out.println("******        3.竞选添加      ******");
             System.out.println("******        4.竞选登录      ******");
+            System.out.println("******        5.管理注册      ******");
+            System.out.println("******        6.管理登录      ******");
             System.out.println("******        0.退出         ******");
             System.out.println("***********************************");
             System.out.println("选择用户种类：");
@@ -90,6 +96,31 @@ public class Application implements CommandLineRunner {
                     if (candidate != null) {
                         System.out.println("登录成功！");
                         Candidatemenu(candidate);
+                    } else {
+                        System.out.println("登录失败！");
+                    }
+                    break;
+                case 5 :
+                    System.out.println("输入管理者名字");
+                    String managername = sc.next();
+                    System.out.println("输入密码");
+                    String managerpassword = sc.next();
+                    Manager manager = managerService.newManager(managername,managerpassword);
+                    if(manager.getId() != null){
+                        System.out.println("注册成功");
+                    }else {
+                        System.out.println("注册失败");
+                    }
+                    break;
+                case 6 :
+                    System.out.println("请输入用户名：");
+                    username = sc.next();
+                    System.out.println("输入密码");
+                    password = sc.next();
+                    manager = managerService.login(username,password);
+                    if (manager != null) {
+                        System.out.println("登录成功！");
+                        managermenu(manager);
                     } else {
                         System.out.println("登录失败！");
                     }
@@ -168,5 +199,93 @@ public class Application implements CommandLineRunner {
 
         }
     }
+
+    private void managermenu(Manager manager){
+        while (true) {
+            System.out.println("**********************************");
+            System.out.println("******        1.审核参选对象   ******");
+            System.out.println("******        2.选举时间发布   ******");
+            System.out.println("******        3.统计投票结果   ******");
+            System.out.println("******        0.退出         ******");
+            System.out.println("***********************************");
+            System.out.println("选择功能");
+            int op = sc.nextInt();
+            switch (op) {
+                case 1 :
+                    List<Candidate> list = candidateService.findAll();
+                    for (Candidate x :
+                            list) {
+                        System.out.println(x.toString());
+                    }
+                    break;
+                case 2 :
+                    candidateService.findAll().forEach(System.out::println);
+                    break;
+                case 3 :
+                    sticks();
+                    break;
+                default :
+                    System.out.println("管理功能退出");
+                    System.exit(0);
+            }
+        }
+    }
+
+    private void sticks(){
+        while (true) {
+            System.out.println("**********************************");
+            System.out.println("******        1.票数        ******");
+            System.out.println("******        2.排名        ******");
+            System.out.println("******        3.百分比       ******");
+            System.out.println("******        0.退出         ******");
+            System.out.println("***********************************");
+            System.out.println("选择功能");
+            List<Candidate> list = candidateService.findAll();
+            int op = sc.nextInt();
+            switch (op) {
+                case 1:
+                    int cp = 1;
+                    for (Candidate x :
+                            list) {
+                        int length = x.getUsers().size();
+                        System.out.println(cp+"."+length+"票");
+                        cp++;
+                    }
+                    break;
+                case 2 :
+                    int kp = 1;
+                    Map<Integer,Candidate> map = new HashMap<Integer,Candidate>();
+                    Set<Integer> set = new HashSet<Integer>();
+                    for (Candidate x:
+                         list) {
+                        Integer length = x.getUsers().size();
+                        map.put(length,x);
+                        set.add(length);
+                    }
+                    for (Integer y :
+                            set) {
+                        System.out.println("第"+kp+"名是"+map.get(y).getName());
+                        kp++;
+                    }
+                    break;
+                case 3:
+                    double count1 = 0;
+                    for (Candidate x :
+                            list) {
+                        count1 += x.getUsers().size();
+                    }
+                    for (Candidate x :
+                            list) {
+                        double percentage  = x.getUsers().size()/count1;
+                        System.out.println(x.getName()+"的百分比是"+percentage);
+                    }
+                    break;
+                default :
+                    System.out.println("管理的票的系统退出");
+                    System.exit(0);
+            }
+        }
+    }
+
 
 }
