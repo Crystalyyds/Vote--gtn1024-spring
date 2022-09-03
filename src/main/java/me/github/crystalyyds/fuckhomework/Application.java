@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 import javax.inject.Inject;
 import java.util.Scanner;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class Application implements CommandLineRunner {
             System.out.println("******        1.用户注册      ******");
             System.out.println("******        2.用户登录      ******");
             System.out.println("******        3.竞选添加      ******");
+            System.out.println("******        4.竞选登录      ******");
             System.out.println("******        0.退出         ******");
             System.out.println("***********************************");
             System.out.println("选择用户种类：");
@@ -81,6 +83,17 @@ public class Application implements CommandLineRunner {
                         System.out.println("添加失败！");
                     }
                     break;
+                case 4 :
+                    System.out.println("请输入用户名：");
+                    username = sc.next();
+                    candidate = candidateService.login(username);
+                    if (candidate != null) {
+                        System.out.println("登录成功！");
+                        Candidatemenu(candidate);
+                    } else {
+                        System.out.println("登录失败！");
+                    }
+                    break;
                 default:
                     System.out.println("退出系统");
                     System.exit(0);
@@ -119,6 +132,34 @@ public class Application implements CommandLineRunner {
                     break;
                 case 2:
                     voteForSomeone(user);
+                    break;
+                default :
+                    System.out.println("退出用户菜单");
+                    System.exit(0);
+            }
+
+        }
+    }
+
+    private void Candidatemenu(Candidate candidate){
+        while (true) {
+            System.out.println("**********************************");
+            System.out.println("******        1.修改介绍      ******");
+            System.out.println("******        2.查看个人信息    ******");
+            System.out.println("******        0.退出         ******");
+            System.out.println("***********************************");
+            int op = sc.nextInt();
+            switch (op) {
+                case 1:
+                    System.out.println("输入自我介绍");
+                    String description = sc.next();
+                    candidateService.update(candidate,description);
+                    break;
+                case 2 :
+                    System.out.println("============自我介绍============");
+                    System.out.println("竞选者名字是："+candidate.getName());
+                    System.out.println("竞选者自我介绍："+candidate.getDescription());
+                    System.out.println("===============================");
                     break;
                 default :
                     System.out.println("退出用户菜单");
