@@ -104,4 +104,7 @@ public class Application implements CommandLineRunner {
             System.out.println("投票失败！");
         }
     }
+
+
+
 }
