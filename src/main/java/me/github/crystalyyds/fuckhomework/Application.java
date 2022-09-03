@@ -248,7 +248,7 @@ public class Application implements CommandLineRunner {
                     for (Candidate x :
                             list) {
                         int length = x.getUsers().size();
-                        System.out.println(cp+"."+length+"票");
+                        System.out.println(cp+"."+x.getName()+"有"+length+"票");
                         cp++;
                     }
                     break;
@@ -277,7 +277,7 @@ public class Application implements CommandLineRunner {
                     for (Candidate x :
                             list) {
                         double percentage  = x.getUsers().size()/count1;
-                        System.out.println(x.getName()+"的百分比是"+percentage);
+                        System.out.println(x.getName()+"的百分比是"+percentage*100+"%");
                     }
                     break;
                 default :
