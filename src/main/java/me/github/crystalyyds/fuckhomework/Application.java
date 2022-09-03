@@ -63,7 +63,7 @@ public class Application implements CommandLineRunner {
                     user = userService.login(username, password);
                     if (user != null) {
                         System.out.println("登录成功！");
-                        voteForSomeone(user);
+                        Usermenu(user);
                     } else {
                         System.out.println("登录失败！");
                     }
@@ -105,6 +105,27 @@ public class Application implements CommandLineRunner {
         }
     }
 
+    private void Usermenu(User user){
+        while (true) {
+            System.out.println("**********************************");
+            System.out.println("******        1.搜索参选对象  ******");
+            System.out.println("******        2.投票         ******");
+            System.out.println("******        0.退出         ******");
+            System.out.println("***********************************");
+            int op = sc.nextInt();
+            switch (op) {
+                case 1:
+                    candidateService.findAll().forEach(System.out::println);
+                    break;
+                case 2:
+                    voteForSomeone(user);
+                    break;
+                default :
+                    System.out.println("退出用户菜单");
+                    System.exit(0);
+            }
 
+        }
+    }
 
 }

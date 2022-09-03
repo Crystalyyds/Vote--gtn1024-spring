@@ -5,6 +5,7 @@ import me.github.crystalyyds.fuckhomework.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -29,4 +30,9 @@ public class UserService {
         }
         return null;
     }
+
+    public List<User> findAll(){
+        return userRepository.findAll();
+    }
+
 }

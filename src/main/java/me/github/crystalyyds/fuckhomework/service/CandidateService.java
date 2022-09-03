@@ -34,4 +34,8 @@ public class CandidateService {
     public Candidate getCandidate(int id) {
         return candidateRepository.findById(id).orElse(null);
     }
+
+    public List<Candidate> findAll() {
+        return candidateRepository.findAll();
+    }
 }
