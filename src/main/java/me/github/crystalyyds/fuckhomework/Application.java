@@ -37,7 +37,8 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) {
         while (true) {
-            System.out.println("**********************************");
+            System.out.println("*********欢迎来到模拟投票系统*********");
+            System.out.println("******                      ******");
             System.out.println("******        1.用户注册      ******");
             System.out.println("******        2.用户登录      ******");
             System.out.println("******        3.竞选添加      ******");
@@ -45,7 +46,8 @@ public class Application implements CommandLineRunner {
             System.out.println("******        5.管理注册      ******");
             System.out.println("******        6.管理登录      ******");
             System.out.println("******        0.退出         ******");
-            System.out.println("***********************************");
+            System.out.println("******                      ******");
+            System.out.println("************摆烂之家出品************");
             System.out.println("选择用户种类：");
             int op = sc.nextInt();
             switch (op) {
@@ -55,7 +57,9 @@ public class Application implements CommandLineRunner {
                     String username = sc.next();
                     System.out.println("请输入密码：");
                     String password = sc.next();
-                    User user = userService.newUser(username, password);
+                    System.out.println("请输入电话");
+                    String number = sc.next();
+                    User user = userService.newUser(username, password, number);
                     if (user != null) {
                         System.out.println("注册成功！");
                     } else {
@@ -154,6 +158,7 @@ public class Application implements CommandLineRunner {
             System.out.println("**********************************");
             System.out.println("******        1.搜索参选对象  ******");
             System.out.println("******        2.投票         ******");
+            System.out.println("******        3.查看个人信息   ******");
             System.out.println("******        0.退出         ******");
             System.out.println("***********************************");
             int op = sc.nextInt();
@@ -164,6 +169,8 @@ public class Application implements CommandLineRunner {
                 case 2:
                     voteForSomeone(user);
                     break;
+                case 3 :
+                    System.out.println(user.toString());
                 default :
                     System.out.println("退出用户菜单");
                     System.exit(0);

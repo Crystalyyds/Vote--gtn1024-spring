@@ -10,6 +10,8 @@ public class User extends BaseEntity {
     private String username;
     private String password;
 
+    private String number;
+
     public User() {
     }
 
@@ -29,18 +31,26 @@ public class User extends BaseEntity {
         this.password = password;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(password, user.password);
+        return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(number, user.number);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), username, password);
+        return Objects.hash(super.hashCode(), username, password, number);
     }
 
     @Override
@@ -48,6 +58,7 @@ public class User extends BaseEntity {
         return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                "} " + super.toString();
+                ", number='" + number + '\'' +
+                '}';
     }
 }
