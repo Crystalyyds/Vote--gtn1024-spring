@@ -137,19 +137,25 @@ public class Application implements CommandLineRunner {
     }
 
     private void voteForSomeone(User user) {
-        System.out.println("===== 进入投票程序 =====");
-        candidateService.getAllCandidates().forEach(System.out::println);
-        System.out.println("请输入您要投票的编号：");
-        int id = sc.nextInt();
-        Candidate candidate = candidateService.getCandidate(id);
-        if (candidate != null) {
-            Set<User> users = candidate.getUsers();
-            users.add(user);
-            candidate.setUsers(users);
-            candidateService.updateCandidate(candidate);
-            System.out.println("投票成功！");
-        } else {
-            System.out.println("投票失败！");
+        if (user.getCount()==null) {
+            System.out.println("===== 该用户还没有投票 ====");
+            System.out.println("===== 进入投票程序 =====");
+            candidateService.getAllCandidates().forEach(System.out::println);
+            System.out.println("请输入您要投票的编号：");
+            int id = sc.nextInt();
+            Candidate candidate = candidateService.getCandidate(id);
+            if (candidate != null) {
+                Set<User> users = candidate.getUsers();
+                users.add(user);
+                candidate.setUsers(users);
+                candidateService.updateCandidate(candidate);
+                System.out.println("投票成功！");
+                user.setCount(1);
+            } else {
+                System.out.println("投票失败！");
+            }
+        }else {
+            System.out.println("该用户已经投票，不能投票");
         }
     }
 
@@ -171,6 +177,7 @@ public class Application implements CommandLineRunner {
                     break;
                 case 3 :
                     System.out.println(user.toString());
+                    break;
                 default :
                     System.out.println("退出用户菜单");
                     System.exit(0);
